@@ -1,0 +1,17 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mysql://localhost:3306/springbatch
+    driver-class-name: com.mysql.jdbc.Driver
+    initialization-mode: always
+    schema: classpath:/schema/schema-mysql.sql
+  batch:
+    initialize-schema: embedded
+  job:
+    enabled: true
+    names: study2-oracle
+
+
