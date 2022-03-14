@@ -6,6 +6,7 @@ import lombok.experimental.UtilityClass;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 
@@ -13,7 +14,7 @@ public class StructureTest {
 
     //单链表
     @Data
-    public class ListNode {
+    public static class ListNode {
         int val;
         ListNode next;
 
@@ -62,7 +63,7 @@ public class StructureTest {
 
     //树基础结构
     @Data
-    public class TreeNode {
+    public static class TreeNode {
         String id;
         String parentId;
         String name;
@@ -76,7 +77,7 @@ public class StructureTest {
 
     @Data
     @EqualsAndHashCode(callSuper = true)
-    public class DeptTree extends TreeNode {
+    public static class DeptTree extends TreeNode {
         private String name;
     }
 
@@ -174,6 +175,60 @@ public class StructureTest {
 
     public class SkipList {
 
+    }
+
+
+    /**
+     * @Author Dr. zhang
+     * @CreateTime 2022/3/14
+     * @Description 根据长度，获得指定长度的随机数数组
+     */
+    public int[] getRandomArrays(int arrayLength) {
+        int[] arrays = new int[arrayLength];
+        Random a = new Random();
+        for (int i = 0; i < arrays.length; i++) {
+            arrays[i] = Math.abs(a.nextInt());
+        }
+        return arrays;
+    }
+
+    /**
+     * @Author Dr. zhang
+     * @CreateTime 2022/3/14
+     * @Description 根据长度和头节点，追加指定长度的节点
+     */
+    public ListNode getRandomSingleLinked(ListNode listNode, int linkedLength) {
+        if (listNode == null) {
+            listNode = new ListNode();
+        }
+        Random a = new Random();
+        listNode.val = Math.abs(a.nextInt());
+        if (linkedLength != 1) {
+            listNode.next = new ListNode();
+            getRandomSingleLinked(listNode.next, linkedLength - 1);
+        }
+        return listNode;
+    }
+
+    //打印单链表
+    public void printList(ListNode head) {
+        String str = "";
+        for (ListNode n = head; n != null; ) {
+            str = str + " " + n.val;
+            n = n.next;
+        }
+        System.out.println(str);
+    }
+
+
+    public DeptTree getRandomTree(DeptTree deptTree, int treehigh, String isFull) {
+        if (deptTree == null) {
+            deptTree = new DeptTree();
+        }
+        Random a = new Random();
+        deptTree.val = Math.abs(a.nextInt());
+
+        return deptTree;
     }
 
 }
