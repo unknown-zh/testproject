@@ -1,6 +1,7 @@
 package com.springbatch.springbatchtest.test;
 
 
+import com.mysql.cj.x.protobuf.MysqlxDatatypes;
 import com.springbatch.springbatchtest.test.StructureTest.ListNode;
 import lombok.extern.log4j.Log4j2;
 import net.minidev.json.JSONValue;
@@ -8,6 +9,9 @@ import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.*;
+import java.util.concurrent.BrokenBarrierException;
+
+import java.util.concurrent.CyclicBarrier;
 
 /**
  * 算法练习
@@ -232,7 +236,7 @@ public class AlgorithmTest {
         if (s.length() == 0) {
             return true;
         }
-        if (s.length() % 2 == 1) {
+        if (s.length() >> 1 == 1) {
             return false;
         }
         for (char a : s.toCharArray()) {
@@ -391,4 +395,95 @@ public class AlgorithmTest {
 //        ArrayList
     }
 
+
+    static class Base {
+        public static String s = "Super Class ";
+
+        public Base() {
+            System.out.println("1");
+        }
+    }
+
+    public static class Derived extends AlgorithmTest.Base {
+        public Derived() {
+            super();
+            System.out.println("2");
+        }
+
+        public static void main(String[] args) {
+            Derived d = new Derived();
+            System.out.println(s);
+        }
+    }
+
+    public static class Test1 {
+        public static String output = "";
+
+        public static void foo(int i) {
+            try {
+                if (i == 1) {
+                    throw new Exception();
+                }
+                output += "1";
+            } catch (Exception e) {
+                output += "2";
+                return;
+            } finally {
+                output += "3";
+            }
+            output += "4";
+        }
+
+        public static void main(String[] args) {
+            foo(0);
+            foo(1);
+            System.out.println(Test1.output);
+        }
+    }
+
+    public static class Test2 {
+        public static void main(String[] args) {
+            for (int i = 0; i < 3; i++) {
+                for (int j = 3; i >= 0; j--) {
+                    if (i == j) break;
+                    for (int k = 0; k >= 0; k++) {
+                        if (j == k) break;
+                        for (int m = 3; m >= 0; m--) {
+                            if (k == m) break;
+                            System.out.println(i + "" + j + "" + k + "" + m);
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    public static class Test3 implements Runnable {
+        public static CyclicBarrier barrier = new CyclicBarrier(3);
+
+        public void run() {
+            System.out.println("B");
+            try {
+                barrier.await();
+            } catch (InterruptedException | BrokenBarrierException e) {
+                e.printStackTrace();
+            }
+        }
+
+        public static void main(String[] args) throws InterruptedException {
+            Thread thread1 = new Thread(new Test3());
+            Thread thread2 = new Thread(new Test3());
+            thread1.start();
+            thread2.start();
+            System.out.println("A");
+            try {
+                barrier.await();
+            } catch (InterruptedException | BrokenBarrierException e) {
+                e.printStackTrace();
+            }
+            System.out.println("C");
+        }
+
+    }
 }

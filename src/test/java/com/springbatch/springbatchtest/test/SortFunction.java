@@ -7,7 +7,9 @@ import org.junit.Test;
 
 import java.lang.reflect.Array;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Random;
+import java.util.TreeSet;
 
 import com.springbatch.springbatchtest.test.StructureTest.ListNode;
 import com.springbatch.springbatchtest.test.StructureTest.DeptTree;
@@ -20,6 +22,8 @@ import com.springbatch.springbatchtest.test.StructureTest.DeptTree;
  * @Description 基础排序算法联系
  */
 public class SortFunction {
+
+
 
     /**
      * @Description: 直接排序，
@@ -88,56 +92,48 @@ public class SortFunction {
     }
 
 
-    public void bubbleSortForLinkedByZhmt(ListNode listNode) {
-        if (listNode.next == null) return;
-        ListNode preNode;
-        ListNode curNode;
-        ListNode nextNode;
+    public ListNode bubbleSortForLinkedByZhmt(ListNode listNode) {
+        if (listNode.next == null) return null;
+        ListNode head = listNode;
 
-        while(listNode.next != null){
-            while(listNode.next != null){
-
+        while (listNode.next != null) {
+            boolean isFlag = false;
+            while (listNode.next != null) {
+                if (listNode.val > listNode.next.val) {
+                    ListNode temp = listNode.next;
+                    listNode.next = temp.next;
+                    temp.next = listNode;
+                    listNode = temp;
+                    isFlag = true;
+                }
+                if (listNode.next == null) return head;
+                ListNode temp = listNode;
+                if (head.next.val == temp.val) {
+                    head = temp;
+                }
+                listNode = listNode.next;
             }
+            if (isFlag == false) return head;
         }
-
+        return head;
     }
 
     //单链表冒泡排序
-    public ListNode bubbleSortListForLinkedByWeb(ListNode node) {
-        System.out.println("blue start...");
-        //当前节点
-        ListNode cur = node.next;
-        //下一个节点
-        ListNode next = cur.next;
-        //前一个节点,两节点n1,n2交换位置时需要前一个节点的next指向n2节点
-        ListNode upperNode = node;
-        //一次排序的最后一个节点
-        ListNode lastNode = null;
-        int i = 1;
-        //当第二个节点为当次排序的最后一个节点时，整体排序结束
-        while (node.next != lastNode) {
-            //当下一个节点为一次次排序的最后一个节点时，本次排序结束。
-            if (next == lastNode) {
-                lastNode = cur;
-                cur = node.next;
-                next = cur.next;
-                upperNode = node;
-            } else if (next.val < cur.val) {
-                cur.next = next.next;
-                next.next = cur;
-                upperNode.next = next;
-                upperNode = next;
-            } else {
-                upperNode = cur;
+    public void bubbleSortListForLinkedByWeb(ListNode node) {
+        ListNode cur = node;
+        ListNode tmp = null;
+        while (cur != tmp) {
+            while (cur.next != tmp) {
+                if (cur.val > cur.next.val) {
+                    int temp = cur.val;
+                    cur.val = cur.next.val;
+                    cur.next.val = temp;
+                }
                 cur = cur.next;
             }
-            next = cur.next;
-            System.out.println("第" + i++ + "次排列结果:");
-            StructureTest structureTest = new StructureTest();
-            structureTest.printList(node);
+            tmp = cur;
+            cur = node;
         }
-        System.out.println("blue end...");
-        return node;
     }
 
 
@@ -282,8 +278,12 @@ public class SortFunction {
     @Test
     public void testForLinked() {
         StructureTest structureTest = new StructureTest();
-        ListNode singleLinked = structureTest.getRandomSingleLinked(null, 3);
+
+        ListNode singleLinked = structureTest.getRandomSingleLinked(null, 5);
+        structureTest.printList(singleLinked);
         bubbleSortListForLinkedByWeb(singleLinked);
+//        ListNode listNode = bubbleSortForLinkedByZhmt(singleLinked);
+        structureTest.printList(singleLinked);
 
     }
 
