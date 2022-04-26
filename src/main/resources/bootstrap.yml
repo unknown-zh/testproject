@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: einp-risk-config
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    inetutils:
+    #排除的网卡名称
+      ignored-interfaces:
+      - VirtualBox.*
+      - TAP.*
+#    nacos:
+#      config:
+#                # 默认true，本地开发不使用设置false
+#        enabled: true
+#        server-addr: 172.16.3.28:8848
+#                #配置文件后缀名
+#        file-extension: yml
+#        shared-dataids: common_nacos.yml,shared_redis.yml,shared_security.yml
+#      discovery:
+#        enabled: true
+#        server-addr: 172.16.3.28:8848
+    consul:
+      host: 172.16.3.1
+      port: 8501
+      #开始配置中心开关
+      enabled: true
+      config:
+        enabled: false
+      discovery:
+        #开始注册中心开关
+        register: false
+        serviceName: ${spring.application.name}
+        healthCheckPath: /actuator/health
+        healthCheckInterval: 1s
+        instanceId: ${spring.application.name}
+        ip-address: ${spring.cloud.client.ipaddress}
+        prefer-ip-address: true
+

@@ -6,7 +6,7 @@ spring:
     password: root
     url: jdbc:mysql://localhost:3306/springbatch
     driver-class-name: com.mysql.jdbc.Driver
-    initialization-mode: always
+    initialization-mode: NEVER
     schema: classpath:/schema/schema-mysql.sql
   batch:
     initialize-schema: embedded

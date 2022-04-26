@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration packagingData="true" debug="false">
+	<include resource="org/springframework/boot/logging/logback/defaults.xml" />
+	<include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+	<!--格式化输出,%d:日期;%thread:线程名;%-5level：级别,从左显示5个字符宽度;%msg:日志消息;%n:换行符-->
+	<property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"/>
+
+	<!-- 如果需要设置参数，所有这些参数都需要配置在bootstrap.yml或启动脚本中已达到优先加载，建议在启动脚本中增加 -->
+	<!-- LOG_FILE_DIR和LOG_NODE的参数需要增加golf-boot-starter-logging包 -->
+	<springProperty scope="context" name="appName" source="spring.application.name" defaultValue="application" />
+	<springProperty scope="context" name="componentCode" source="logging.ext.component-code" defaultValue="01" />
+	<springProperty scope="context" name="subComponentCode" source="logging.ext.sub-component-code"/>
+	<springProperty scope="context" name="node" source="logging.ext.node" />
+
+	<!-- 系统日志文件名 ComponentCode.SubComponentCode.Node.out.log.yyyymmdd.n -->
+	<!-- <property name="SYS_LOG_FILE" value="${LOG_HOME:-${HOME:-${HOMEDRIVE}${HOMEPATH}}}/${componentCode}.${subComponentCode:-${appName}}.${node:-${LOG_NODE:-0}}.out.log" /> -->
+	<property name="SYS_LOG_FILE" value="${LOG_HOME:-${LOG_FILE_DIR}}/${componentCode}.${subComponentCode:-${appName}}.${node:-${LOG_NODE:-0}}.out.log" />
+
+	<!-- 系统日志文件 -->
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<encoder>
+			<pattern>${LOG_PATTERN}</pattern>
+		</encoder>
+		<file>${SYS_LOG_FILE}</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${SYS_LOG_FILE}.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+			<maxFileSize>100MB</maxFileSize>
+			<maxHistory>30</maxHistory>
+			<!-- <totalSizeCap>10GB</totalSizeCap> -->
+		</rollingPolicy>
+	</appender>
+
+	<root level="INFO">
+		<appender-ref ref="FILE" />
+		<appender-ref ref="CONSOLE" />
+	</root>
+	<logger name="org.mohrss.si.einp.riskcontrol.config.app" level="debug">
+	</logger>
+	<logger name="org.mohrss.si.einp.riskcontrol.config.third.api.card" level="debug">
+	</logger>
+
+</configuration>
